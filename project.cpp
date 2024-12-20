@@ -1,12 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void history();
-void insertHistory(node *& root, Event dataEvent);
-void historyInOrder(node* root);
-void historyPostOrder(node* root);
-void historyPreOrder(node* root);
-
 struct Event {
     int id;
     string name;
@@ -23,6 +17,12 @@ struct node
 
 node *root = nullptr;
 char choice;
+
+void history();
+void insertHistory(node *& root, Event dataEvent);
+void historyInOrder(node* root);
+void historyPostOrder(node* root);
+void historyPreOrder(node* root);
 
 int main() {
     history();
