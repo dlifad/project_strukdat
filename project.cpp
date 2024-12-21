@@ -16,7 +16,7 @@ struct node
 };
 
 node *root = nullptr;
-char choice;
+char choice, kembali;
 
 void history();
 void insertHistory(node *& root, Event dataEvent);
@@ -25,37 +25,83 @@ void historyPostOrder(node* root);
 void historyPreOrder(node* root);
 
 int main() {
-    history();
+    do
+    {
+        system("cls");
+        cout << "Menu\n";
+        cout << "[1] Tambah jadwal acara\n";
+        cout << "[2] Tampilkan jadwal acara\n";
+        cout << "[3] Cari jadwal acara\n";
+        cout << "[4] Riwayat jadwal acara\n";
+        cout << "[5] Keluar\n";
+        cout << "Pilih menu > "; cin >> choice;
+
+        switch (choice)
+        {
+        case '1':
+            system("cls");
+            
+            break;
+        case '2':
+            system("cls");
+
+            break;
+        case '3':
+            system("cls");
+
+            break;
+        case '4':
+            system("cls");
+            history();
+            break;
+        case '5':
+            cout << "Terima kasih";
+            exit(0);
+            break;
+        default:
+            cout << "Pilihan menu tidak tersedia";
+            break;
+        }
+        cout << "\n\nKembali ke menu utama? (y/n) > "; cin >> kembali;
+    } while (kembali == 'y');
+    
+    
 }
 
 void history(){
-    cout << "Berdasarkan";
-    cout << "\n[1] In-Order";
-    cout << "\n[2] Post-Order";
-    cout << "\n[3] Pre-Order";
-    cout << "\nPilih menu > "; cin >> choice;
+    do
+    {   
+        cout << "History berdasarkan";
+        cout << "\n[1] In-Order";
+        cout << "\n[2] Post-Order";
+        cout << "\n[3] Pre-Order";
+        cout << "\nPilih menu > "; cin >> choice;
 
-    switch (choice)
-    {
-    case '1':
-        system("cls");
-        cout << "History jadwal (In-Order)\n\n";
-        historyInOrder(root);
-        break;
-    case '2':
-        system("cls");
-        cout << "History jadwal (Post-Order)\n\n";
-        historyPostOrder(root);
-        break;
-    case '3':
-        system("cls");
-        cout << "History jadwal (Pre-Order)\n\n";
-        historyPreOrder(root);
-        break;
+        switch (choice)
+        {
+        case '1':
+            system("cls");
+            cout << "History jadwal (In-Order)\n\n";
+            historyInOrder(root);
+            break;
+        case '2':
+            system("cls");
+            cout << "History jadwal (Post-Order)\n\n";
+            historyPostOrder(root);
+            break;
+        case '3':
+            system("cls");
+            cout << "History jadwal (Pre-Order)\n\n";
+            historyPreOrder(root);
+            break;
+        default:
+            cout << "Pilihan menu tidak tersedia";
+            break;
+        }
+        cout << "\n\nKembali ke menu history? (y/n) > "; cin >> kembali;
+    } while (kembali == 'y');
     
-    default:
-        break;
-    }
+    
 }
 
 void insertHistory(node *& root, Event dataEvent) {
