@@ -15,14 +15,33 @@ struct node
     node *right;
 };
 
+struct HashTable {
+    vector<node*> table;
+    int size;
+
+    HashTable(int s) : size(s) {
+        table.resize(s, nullptr);
+    }
+};
+
+int tableSize = 100;
 node *root = nullptr;
 char choice, kembali;
+
+//Fungsi-Fungsi untuk Hash Table
+int hashFunction(int id, int tableSize);
+void insertToHashTable(HashTable& table, node* event);
+void deleteFromHashTable(HashTable& table, int id);
+vector<node*> searchByMonth(HashTable& table, int month);
+void displayHashTable(HashTable& table);
+void displaySearchResults(const vector<node*>& events);
 
 void history();
 void insertHistory(node *& root, Event dataEvent);
 void historyInOrder(node* root);
 void historyPostOrder(node* root);
 void historyPreOrder(node* root);
+
 
 int main() {
     do
@@ -67,6 +86,77 @@ int main() {
     
     
 }
+
+int hashFunction(int id, int tableSize) {
+    return id % tableSize;
+}
+
+void insertToHashTable(HashTable& table, node* event) {
+    int index = hashFunction(event->info.id, table.size);
+    event->right = table.table[index];
+    table.table[index] = event;
+    cout << "Event dengan ID " << event->info.id << " berhasil ditambahkan ke hash table.\n";
+}
+
+void deleteFromHashTable(HashTable& table, int id) {
+    int index = hashFunction(id, table.size);
+    node* current = table.table[index];
+    node* prev = nullptr;
+
+    while (current != nullptr) {
+        if (current->info.id == id) {
+            if (prev == nullptr) {
+                table.table[index] = current->right;
+            } else {
+                prev->right = current->right;
+            }
+            cout << "Event dengan ID " << id << " berhasil dihapus dari hash table.\n";
+            delete current;
+            return;
+        }
+        prev = current;
+        current = current->right;
+    }
+    cout << "Event dengan ID " << id << " tidak ditemukan di hash table.\n";
+}
+
+vector<node*> searchByMonth(HashTable& table, int month) {
+    vector<node*> result;
+    for (int i = 0; i < table.size; i++) {
+        node* current = table.table[i];
+        while (current != nullptr) {
+            int eventMonth = stoi(current->info.date.substr(3, 2));
+            if (eventMonth == month) {
+                result.push_back(current);
+            }
+            current = current->right;
+        }
+    }
+    return result;
+}
+
+void displayHashTable(HashTable& table) {
+    for (int i = 0; i < table.size; i++) {
+        cout << "Index " << i << ": ";
+        node* current = table.table[i];
+        while (current != nullptr) {
+            cout << "[ID: " << current->info.id << ", Name: " << current->info.name << ", Date: " << current->info.date << "] -> ";
+            current = current->right;
+        }
+        cout << "nullptr\n";
+    }
+}
+
+void displaySearchResults(const vector<node*>& events) {
+    if (events.empty()) {
+        cout << "Tidak ada acara yang ditemukan untuk bulan yang diberikan.\n";
+        return;
+    }
+    for (const auto& event : events) {
+        cout << "[ID: " << event->info.id << ", Name: " << event->info.name << ", Date: " << event->info.date << "]\n";
+    }
+}
+
 
 void history(){
     do
