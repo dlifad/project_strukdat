@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <conio.h>
 using namespace std;
 
 struct Event {
@@ -44,7 +45,10 @@ void historyPreOrder(node *root);
 void insertEvent();
 void deleteEvent();
 void searchEvent();
+
 void title(string text);
+bool isValidDate(string &date);
+bool isLeapYear(int year);
 
 int main() {
     do {
@@ -76,7 +80,7 @@ int main() {
             break;
         case '6':
             cout << "Terima kasih\n";
-            return 0; // Menggunakan return untuk keluar dari program
+            return 0; 
         default:
             cout << "Pilihan menu tidak tersedia\n";
             break;
@@ -89,19 +93,29 @@ int main() {
 void insertEvent() {
     int eventID;
     string eventName, eventDesc, eventDate;
-    title("TAMBAH ACARA");
-    cout << "ID" << endl << "-> ";
-    cin >> eventID;
-    cin.ignore();
-    cout << "-" << setfill('-') << setw(38) << "-" << endl;
-    cout << "Nama Acara" << endl << "-> ";
-    getline(cin, eventName);
-    cout << "-" << setfill('-') << setw(38) << "-" << endl;
-    cout << "Deskripsi Acara" << endl << "-> ";
-    getline(cin, eventDesc);
-    cout << "-" << setfill('-') << setw(38) << "-" << endl;
-    cout << "Tanggal Acara (dd/mm/yy)" << endl << "-> ";
-    getline(cin, eventDate);
+    do {
+        title("TAMBAH ACARA");
+        cout << "ID" << endl << "-> ";
+        cin >> eventID;
+        cin.ignore();
+        cout << "-" << setfill('-') << setw(38) << "-" << endl;
+        cout << "Nama Acara" << endl << "-> ";
+        getline(cin, eventName);
+        cout << "-" << setfill('-') << setw(38) << "-" << endl;
+        cout << "Deskripsi Acara" << endl << "-> ";
+        getline(cin, eventDesc);
+        cout << "-" << setfill('-') << setw(38) << "-" << endl;
+        cout << "Tanggal Acara (dd/mm/yy)" << endl << "-> ";
+        getline(cin, eventDate);
+
+        if (!isValidDate(eventDate))  {
+            cout << "\nFormat tanggal tidak valid.";
+            cout << "\nSilahkan masukkan data ulang.";
+            _getch();
+        }
+    } while (!isValidDate(eventDate));
+
+    
     cout << "-" << setfill('-') << setw(38) << "-" << endl << endl;
 
     node *event = new node;
@@ -314,4 +328,43 @@ void title(string text) {
 	cout << setw(panjang + text.length()) << right << text << endl;
 	cout << "=" << setfill('=') << setw(38) << "=" << endl;
 	cout << setfill(' ');
+}
+
+bool isLeapYear(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+bool isValidDate(string &date) {
+    int day, month, year;
+
+    // Memisahkan string tanggal menjadi hari, bulan, dan tahun
+    char delimiter;
+    stringstream ss(date);
+    ss >> day >> delimiter >> month >> delimiter >> year;
+
+    // Memeriksa format tanggal
+    if (delimiter != '/' || ss.fail() || day < 1 || month < 1 || year < 0) {
+        return false;
+    }
+
+    // Mengubah tahun dua digit menjadi empat digit
+    if (year < 100) {
+        year += 2000; // Asumsi tahun 00-99 adalah 2000-2099
+    }
+
+    // Memeriksa batasan bulan dan hari
+    if (month > 12) {
+        return false;
+    }
+
+    // Jumlah hari dalam setiap bulan
+    int daysInMonth[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    // Memperbaiki jumlah hari untuk bulan Februari jika tahun kabisat
+    if (isLeapYear(year)) {
+        daysInMonth[2] = 29;
+    }
+
+    // Memeriksa apakah hari valid untuk bulan yang diberikan
+    return day <= daysInMonth[month];
 }
