@@ -102,6 +102,7 @@ void insertEvent() {
     cout << "-" << setfill('-') << setw(38) << "-" << endl;
     cout << "Tanggal Acara (dd/mm/yy)" << endl << "-> ";
     getline(cin, eventDate);
+    cout << "-" << setfill('-') << setw(38) << "-" << endl << endl;
 
     node *event = new node;
     event->info.id = eventID;
@@ -171,6 +172,7 @@ void deleteFromHashTable(HashTable &table, int id) {
 
     while (current != nullptr) {
         if (current->info.id == id) {
+            insertHistory(root, current->info);
             if (prev == nullptr) {
                 table.table[index] = current->right;
             } else {
